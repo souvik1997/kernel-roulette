@@ -1,0 +1,13 @@
+[package]
+name = "kernel-roulette"
+version = "0.1.0"
+authors = ["Souvik Banerjee <souvik@souvik.me>"]
+
+[lib]
+name = "roulette"
+crate-type = ["staticlib"]
+
+[dependencies]
+lazy_static = { version = "1.0.0", features = ["spin_no_std"] }
+spin = "0.4.7"
+rand = { version = "0.4.2", default-features = false }
