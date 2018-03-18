@@ -42,3 +42,13 @@ If you _really_ want it to panic replace `abort()` with `panic_c()` in `src/lang
  - Follow the instructions in `dmesg`: in this case you would run `sudo /bin/mknod /dev/kernel-roulette c 243 0`
  - Run `cat /dev/kernel-roulette`
  - Unload the module with `sudo rmmod build/roulette.ko`
+ 
+ 
+ ## Acknowledgements
+ - [rust.ko](https://github.com/tsgates/rust.ko)
+ - [kmod](https://github.com/saschagrunert/kmod)
+ - [The Linux Kernel Module Programming Guide](https://www.tldp.org/LDP/lkmpg/2.6/html/index.html)
+ - https://elixir.bootlin.com/
+ 
+ ## License
+ GPL 3
