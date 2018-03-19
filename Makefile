@@ -4,7 +4,7 @@
 export KERNEL_MODULE := roulette
 
 # Path to Linux kernel headers
-export KERNEL_BUILD_PATH := /usr/src/linux-headers-$(shell uname -r)
+export KERNEL_BUILD_PATH := /lib/modules/$(shell uname -r)/build
 
 # Find all C and Rust source files
 export C_FILES := $(shell find src/ -type f -name "*.c")
