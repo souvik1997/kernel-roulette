@@ -1,4 +1,5 @@
 use alloc::*;
+use alloc::vec::Vec;
 use core::fmt;
 use spin::Mutex;
 

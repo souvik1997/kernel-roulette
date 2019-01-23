@@ -32,7 +32,7 @@ $(obj)/$(RUST_TARGET): $(RUST_FILES) $(LLVM_TARGET_SPEC) $(BASE_DIR)/$(KBUILD)
 # directory but subsequent invokations of cargo/xargo/rustc might change their working directory. Setting
 # RUST_TARGET_PATH ensures that the compiler can find the LLVM target specification.
 # We also have to `cd` into $(BASE_DIR) since we are currently in the kernel headers directory.
-	(cd $(BASE_DIR); env RUST_TARGET_PATH=$(BASE_DIR) $(XARGO) rustc $(if $(RELEASE),--release) $(if $(VERBOSE),--verbose) --target $(UTS_MACHINE)-unknown-none-gnu -- -C code-model=kernel -C relocation-model=static -C panic=abort)
+	(cd $(BASE_DIR); env RUST_TARGET_PATH=$(BASE_DIR) $(CARGO) xbuild $(if $(RELEASE),--release) $(if $(VERBOSE),--verbose) --target $(UTS_MACHINE)-unknown-none-gnu)
 # After the archive is compiled, copy it to the build directory
 	cp "$(CARGO_BUILD_DIR)/$(RUST_TARGET)" $(obj)
 
