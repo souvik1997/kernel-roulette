@@ -1,5 +1,9 @@
 use core::panic::PanicInfo;
 
+#[lang = "eh_personality"]
+#[no_mangle]
+pub extern "C" fn eh_personality() {}
+
 #[allow(dead_code)]
 extern "C" {
     fn abort() -> !;
