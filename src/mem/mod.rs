@@ -1,4 +1,4 @@
-use alloc::heap::{Alloc, AllocErr, Layout};
+use core::alloc::{GlobalAlloc, Layout};
 
 #[derive(Default)]
 pub struct KernelAllocator;
@@ -17,8 +17,8 @@ extern "C" {
     fn krealloc_c(ptr: *mut u8, size: usize) -> *mut u8;
 }
 
-unsafe impl<'a> Alloc for &'a KernelAllocator {
-    unsafe fn alloc(&mut self, layout: Layout) -> Result<*mut u8, AllocErr> {
+unsafe impl GlobalAlloc for KernelAllocator {
+    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
         // A side effect of the buddy allocator is that allocations are aligned to
         // the power-of-two that is larger than the allocation size. So if the
         // request needs to be aligned to something larger than the allocation size,
@@ -27,13 +27,13 @@ unsafe impl<'a> Alloc for &'a KernelAllocator {
         use core::cmp::max;
         let p = kmalloc_c(max(layout.size(), layout.align()));
         if p.is_null() {
-            Err(AllocErr::Exhausted { request: layout })
+            0 as *mut u8            
         } else {
-            Ok(p)
+            p
         }
     }
 
-    unsafe fn dealloc(&mut self, ptr: *mut u8, _layout: Layout) {
+    unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
         kfree_c(ptr);
     }
 }

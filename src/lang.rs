@@ -1,36 +1,38 @@
-use core;
+use core::panic::PanicInfo;
 
-// These functions and traits are used by the compiler, but not
-// for a bare-bones hello world. These are normally
-// provided by libstd.
 #[lang = "eh_personality"]
 #[no_mangle]
 pub extern "C" fn eh_personality() {}
 
-#[lang = "eh_unwind_resume"]
-#[no_mangle]
-pub extern "C" fn eh_unwind_resume(_a: *const u8) {}
-
 #[allow(dead_code)]
 extern "C" {
-    fn abort();
+    fn abort() -> !;
     fn panic_c();
 }
 
-#[lang = "panic_fmt"]
+#[panic_handler]
 #[no_mangle]
-pub extern "C" fn rust_begin_panic(msg: core::fmt::Arguments, file: &'static str, line: u32) -> ! {
-    use super::io;
+pub fn rust_begin_panic(info: &PanicInfo) -> ! {
     // Print the file and line number
-    println!("Rust panic @ {}:{}", file, line);
+    if let Some(location) = info.location() {
+        println!("Rust panic @ {}:{}",
+            location.file(), location.line());
+    }
 
     // Print the message and a newline
-    io::print(msg);
-    println!("");
+    if let Some(message) = info.message() {
+        println!("{}", message);
+    }
 
     unsafe {
         // In a real kernel module, we should use abort() instead of panic()
-        abort(); // replace with panic_c() if you want
+        abort() // replace with panic_c() if you want
     }
-    loop {}
+}
+
+use core::alloc::Layout;
+#[cfg(not(test))]
+#[alloc_error_handler]
+pub fn alloc_error(_: Layout) -> ! {
+    unsafe { abort() }
 }

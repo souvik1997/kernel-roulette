@@ -5,8 +5,9 @@
 // Used for dynamic allocation
 #![feature(alloc)]
 #![feature(allocator_api)]
-#![feature(global_allocator)]
+#![feature(alloc_error_handler)]
 #![feature(const_fn)]
+#![feature(panic_info_message)]
 extern crate alloc;
 // Memory-related functions are in the `mem` module
 mod mem;
